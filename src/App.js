@@ -3,15 +3,23 @@ import TopBanner from './Components/TopBanner';
 import {
     Container
 } from 'reactstrap';
-import ProductList from './Components/ProductList';
 import Header from './Components/Header';
+import {BrowserRouter,Route} from 'react-router-dom';
+import Home from './Containers/Home'
+import Cart from './Containers/Cart'
+import Product from './Containers/Product'
 
 
 function App() {
+
+
+    const [itemSelect, setSelect] = useState(null);
     const [cartItem, setCartItem] = useState(0);
-    
+
     const [bookItem, setBookItem] = useState(null);
 
+
+    
     React.useEffect(()=>{
         fetch('./productItems.json')
         .then(resp => resp.json())
@@ -19,15 +27,28 @@ function App() {
            
     },[]);
     
-    const handlerAddCart = ()=> setCartItem(cartItem+1);
+    function handlerAddCart (item){
+      setCartItem(cartItem + 1);
+      setSelect(item);
+    };
 
     return (
+      <BrowserRouter>
         <div>
-            <Header onChangeCart ={() => setCartItem(cartItem+1)} cartItem ={cartItem}></Header>
+            <Header  cartItem ={cartItem}></Header>
             <TopBanner></TopBanner>
             <Container fluid="true"></Container>
-            <ProductList data={bookItem} onAddToCart={handlerAddCart}></ProductList>
         </div>
+        <Route exact path="/">
+          <Home/>
+        </Route>
+        <Route path="/product">
+          <Product onAddToCart={handlerAddCart} data={bookItem}></Product>
+        </Route>
+        <Route path="/cart">
+          <Cart item={itemSelect} />
+        </Route>
+      </BrowserRouter>
     )
 }
 

@@ -1,16 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
     Card, CardImg, CardText, CardBody,
     CardTitle, CardSubtitle, Button, Col, Row
   } from 'reactstrap';
 
   
-
-function ProductList({data, onAddToCart}){
-    const handlerAddCart = ()=>onAddToCart();
+function Product(props){
     return(
         <Row>
-            { data && data.map((item, index)=>
+          
+            { props.data && props.data.map((item, index)=>
             (
               <Col xs="3">
                 <Card key={+index}>
@@ -19,7 +19,9 @@ function ProductList({data, onAddToCart}){
                   <CardTitle tag="h5">{item.name}</CardTitle>
                   <CardSubtitle tag="h6" className="mb-2 text-muted">Card subtitle</CardSubtitle>
                   <CardText>{item.description}</CardText>
-                  <Button onClick={handlerAddCart}>Add Cart</Button>
+                  <Button onClick={()=>props.onAddToCart(item)}>                  <Link to="/cart">Add Cart</Link>
+</Button>
+
                 </CardBody>
               </Card>
               </Col>
@@ -28,4 +30,4 @@ function ProductList({data, onAddToCart}){
     )
 }
 
-export default ProductList;
+export default Product;
